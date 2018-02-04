@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) <YEAR> Rowgatta, Inc. All rights reserved.
+ */
+
 package $package$.impl
 
 import akka.actor.ActorSystem

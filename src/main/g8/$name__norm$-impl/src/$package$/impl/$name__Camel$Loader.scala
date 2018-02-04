@@ -1,14 +1,19 @@
+/*
+ * Copyright (c) <YEAR> Rowgatta, Inc. All rights reserved.
+ */
+
 package $package$.impl
 
-import com.lightbend.lagom.scaladsl.api.ServiceLocator
+import com.lightbend.lagom.scaladsl.api.{Descriptor, ServiceLocator}
 import com.lightbend.lagom.scaladsl.api.ServiceLocator.NoServiceLocator
-import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
-import com.lightbend.lagom.scaladsl.server._
+import com.lightbend.lagom.scaladsl.broker.kafka.LagomKafkaComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
+import com.lightbend.lagom.scaladsl.persistence.cassandra.CassandraPersistenceComponents
+import com.lightbend.lagom.scaladsl.playjson.JsonSerializerRegistry
+import com.lightbend.lagom.scaladsl.server._
+import com.softwaremill.macwire._
 import play.api.libs.ws.ahc.AhcWSComponents
 import $package$.api.$name;format="Camel"$Service
-import com.lightbend.lagom.scaladsl.broker.kafka.LagomKafkaComponents
-import com.softwaremill.macwire._
 
 class $name;format="Camel"$Loader extends LagomApplicationLoader {
 
@@ -20,7 +25,9 @@ class $name;format="Camel"$Loader extends LagomApplicationLoader {
   override def loadDevMode(context: LagomApplicationContext): LagomApplication =
     new $name;format="Camel"$Application(context) with LagomDevModeComponents
 
-  override def describeService = Some(readDescriptor[$name;format="Camel"$Service])
+  override def describeService: Option[Descriptor] = {
+    Some(readDescriptor[$name;format="Camel"$Service])
+  }
 }
 
 abstract class $name;format="Camel"$Application(context: LagomApplicationContext)
@@ -30,10 +37,14 @@ abstract class $name;format="Camel"$Application(context: LagomApplicationContext
     with AhcWSComponents {
 
   // Bind the service that this server provides
-  override lazy val lagomServer = serverFor[$name;format="Camel"$Service](wire[$name;format="Camel"$ServiceImpl])
+  override lazy val lagomServer: LagomServer = {
+    serverFor[$name;format="Camel"$Service](wire[$name;format="Camel"$ServiceImpl])
+  }
 
   // Register the JSON serializer registry
-  override lazy val jsonSerializerRegistry = $name;format="Camel"$SerializerRegistry
+  override lazy val jsonSerializerRegistry: JsonSerializerRegistry = {
+    $name;format="Camel"$SerializerRegistry
+  }
 
   // Register the $name$ persistent entity
   persistentEntityRegistry.register(wire[$name;format="Camel"$Entity])

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) <YEAR> Rowgatta, Inc. All rights reserved.
+ */
+
 package $package$.api
 
 import akka.{Done, NotUsed}
@@ -40,8 +44,8 @@ trait $name;format="Camel"$Service extends Service {
     // @formatter:off
     named("$name;format="norm"$")
       .withCalls(
-        pathCall("/api/hello/:id", hello _),
-        pathCall("/api/hello/:id", useGreeting _)
+        pathCall("/api/$name;format="norm"$/:id", hello _),
+        pathCall("/api/$name;format="norm"$/:id", useGreeting _)
       )
       .withTopics(
         topic($name;format="Camel"$Service.TOPIC_NAME, greetingsTopic)
